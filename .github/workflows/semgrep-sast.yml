@@ -1,0 +1,21 @@
+name: Semgrep SAST
+
+on:
+  push:
+    branches: [ "master", "main" ] # Triggers on push to these branches
+
+jobs:
+  semgrep-scan:
+    name: Semgrep Analysis
+    runs-on: ubuntu-latest
+    
+    # Check out the code so Semgrep can see it
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        run: |
+          # Pull the semgrep docker image and run it
+          # 'p/default' uses Semgrep's standard security rules
+          docker run --rm -v "${{ github.workspace }}:/src" returntocorp/semgrep semgrep scan --config auto
